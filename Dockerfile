@@ -1,5 +1,13 @@
-FROM ollama/ollama:latest
+FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL https://ollama.com/install.sh | sh
 
 EXPOSE 11434
 
-CMD ollama serve & sleep 20 && ollama pull nomic-embed-text && wait
+ENV OLLAMA_HOST=0.0.0.0
+
+RUN ollama serve & sleep 15 && ollama pull nomic-embed-text && pkill ollama || true
+
+CMD ["ollama", "serve"]
