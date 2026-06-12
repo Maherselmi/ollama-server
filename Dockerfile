@@ -2,7 +2,10 @@ FROM ollama/ollama:latest
 
 EXPOSE 11434
 
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+SHELL ["/bin/bash", "-c"]
 
-ENTRYPOINT ["/bin/bash", "/start.sh"]
+RUN apt-get update && apt-get install -y curl
+
+RUN ollama serve & sleep 15 && ollama pull nomic-embed-text
+
+CMD ["ollama", "serve"]
